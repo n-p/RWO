@@ -94,7 +94,7 @@ class RandomWalking:
                 if i % 2 == 0:  # just mg values
                     # This program suppose tuning values have names like vAlUe0, vAlUe2, etc.
                     value_name = 'vAlUe' + i.__repr__()
-                    if i != 0:
+                    if epoch != 0:
                         values[i] = best_values[i] + 2.0 * (random.random() - 0.5) * 10.0
                     else:
                         values[i] = best_values[i]
