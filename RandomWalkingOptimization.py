@@ -95,7 +95,7 @@ class RandomWalking:
                     # This program suppose tuning values have names like vAlUe0, vAlUe2, etc.
                     value_name = 'vAlUe' + i.__repr__()
                     if i != 0:
-                        values[i] = best_values[i] + 2 * (random.random() - 0.5) * 10.0
+                        values[i] = best_values[i] + 2.0 * (random.random() - 0.5) * 10.0
                     else:
                         values[i] = best_values[i]
                     # or you can use error instead of 10
