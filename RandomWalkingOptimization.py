@@ -77,8 +77,8 @@ class RandomWalking:
         return s
 
     def tune(self, max_samples):
-        # These could be best values we got till now (Current numbers or start from something like 50.0).
-        # These specific values is from Weights array from evaluate.cpp as an example
+        # This could be best values we got till now (Current numbers or start from something like 50.0).
+        # These specific values are from Weights array from evaluate.cpp as an example
         # {266, 334}, {214, 203}, {193, 262}, {47, 0}, {330, 0}, {404, 241}
         best_values = [50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0]
         values = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
