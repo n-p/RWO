@@ -1,3 +1,6 @@
+### Important
+* Important bug fix: The program had a serious flaw that it didn't calculate the error correctly for first iteration.
+
 ### Some Notes:
 * This program using random walking for tuning based on centipawn values.
 * You can extrapolate evaluations.
