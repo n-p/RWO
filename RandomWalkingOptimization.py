@@ -8,7 +8,7 @@ class RandomWalking:
     base_file_name = './base'
     modified_file_name = './stockfish'
     fens_file = "book.epd"  # files contains FENs (middle game or endgame).
-    # to get rid of some warnings or clarity
+    # to get rid of some warnings(and clarity)
     base_engine = None
     modified_engine = None
     info_handler_modified = None
@@ -18,6 +18,8 @@ class RandomWalking:
         self.base_engine = uci.popen_engine(self.base_file_name)
         self.info_handler_base = uci.InfoHandler()
         self.base_engine.info_handlers.append(self.info_handler_base)
+        self.base_engine.setoption({'Threads': '2'})
+        self.modified_engine.setoption({'Threads': '2'})
         # for base engine selected_engine is 0
         # for modified engine selected_engine is 1
         self.selected_engine = self.base_engine
@@ -45,7 +47,8 @@ class RandomWalking:
         # I modified uci.py file for clearing hash
         # if not (name == 'Clear' and value == 'Hash'):
         #     builder.append("value")
-        self.selected_engine.setoption({'Clear': 'Hash'})
+        if selected_engine_index == 1:  # only modified engine needs clearing hash!
+            self.selected_engine.setoption({'Clear': 'Hash'})
         board = Board()
         board.set_fen(fen)
         self.selected_engine.position(board)
@@ -60,7 +63,7 @@ class RandomWalking:
 
     def find_error(self, my_fen):
         d1 = self.run_engine(max_depth=1, fen=my_fen, selected_engine_index=1)
-        d_max = self.run_engine(max_depth=9, fen=my_fen, selected_engine_index=0)
+        d_max = self.run_engine(max_depth=4, fen=my_fen, selected_engine_index=0)
         # if you use depth 1 for both engines the values converge to current values.
         return abs(d_max - d1)
 
@@ -76,46 +79,58 @@ class RandomWalking:
         p.close()
         return s
 
-    def tune(self, max_samples):
-        # This could be best values we got till now (Current numbers or start from something like 50.0).
-        # These specific values are from Weights array from evaluate.cpp as an example
+    def tune(self, max_samples, variables_count):
+        # These could be best values we got till now (Current numbers or start from something like 50.0).
+        # These specific values is from Weights array from evaluate.cpp as an example
         # {266, 334}, {214, 203}, {193, 262}, {47, 0}, {330, 0}, {404, 241}
-        best_values = [50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0]
-        values = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        best_values = []
+        for i in range(variables_count):
+            best_values.append(0)
+        best_values[0] = 266
+        best_values[1] = 214
+        best_values[2] = 193
+        best_values[3] = 47
+        best_values[4] = 330
+        best_values[5] = 404
 
-        p = open('result.txt', 'w')
+        values = []
+        for i in range(variables_count):
+            best_values[i] *= 1.0   # for performance!
+            values.append(0.0)
+
+        p = open('result.txt', 'a+')
+        p.writelines('\n------------New session started-----------------\n')
         min_error = 1000.0
         for epoch in range(10000):
             p.write('Epoch:' + epoch.__repr__() + '\n')
             print('Epoch:' + epoch.__repr__())
             p.write('Values:\n')
             # update values
-            for i in range(12):
-                if i % 2 == 0:  # just mg values
-                    # This program suppose tuning values have names like vAlUe0, vAlUe2, etc.
-                    value_name = 'vAlUe' + i.__repr__()
-                    if epoch != 0:
-                        values[i] = best_values[i] + 2.0 * (random.random() - 0.5) * 10.0
-                    else:
-                        values[i] = best_values[i]
-                    # or you can use error instead of 10
-                    new_value = values[i]
-                    new_value = round(new_value) if new_value > 0 else 0    # I'm not sure we need this
-                    new_value = round(new_value) if new_value < 1000 else 1000
-                    self.modified_engine.setoption({value_name: new_value})
-                    self.modified_engine.ucinewgame(async_callback=False)
-                    p.writelines(value_name + ' = ' + new_value.__repr__() + '\n')
+            for i in range(variables_count):
+                # This program suppose tuning values have names like vAlUe0, vAlUe2, etc.
+                value_name = 'vAlUe' + i.__repr__()
+                if epoch != 0:
+                    values[i] = best_values[i] + 2.0 * (random.random() - 0.5) * 5.0
+                else:
+                    values[i] = best_values[i]
+                # or you can use error instead of 10
+                new_value = values[i]
+                new_value = round(new_value) if new_value > -1000 else -1000
+                new_value = round(new_value) if new_value < 1000 else 1000
+                self.modified_engine.setoption({value_name: new_value})
+                self.modified_engine.ucinewgame(async_callback=False)
+                p.writelines('best_values[' + i.__repr__() + '] = ' + new_value.__repr__() + '.0\n')
             error = self.mse(max_samples)
             p.writelines('error: ')
             print('error: ')
             print(error)
             if error < min_error:
-                for i in range(12):
+                for i in range(variables_count):
                     best_values[i] = values[i]
                 min_error = error
                 p.writelines('Found better values!\n')
                 print('Found better values! ')
-            p.writelines(error.__repr__() + '\n--------------------------------------------------\n')
+            p.writelines(error.__repr__() + '\n---------------------------------------\n')
             print('--------------------------------------------------')
             if error == 0:
                 break
@@ -124,6 +139,7 @@ class RandomWalking:
 
 def main():
     rw = RandomWalking()
-    rw.tune(100)
+    rw.tune(1000, 6)
+
 
 main()
