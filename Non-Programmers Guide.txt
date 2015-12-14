@@ -28,4 +28,4 @@ and so on OR just delete values.
 6- Choose number of samples in main function
 7- The program will write logs in 'result.txt' file.
 8- File names should be base for current master compile and stockfish for modified version.
-9- Tt's ready now to run the program.
+9- It's ready now to run the program.
