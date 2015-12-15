@@ -121,6 +121,8 @@ class RandomWalking:
                 self.modified_engine.ucinewgame(async_callback=False)
                 p.writelines('best_values[' + i.__repr__() + '] = ' + new_value.__repr__() + '.0\n')
             error = self.mse(max_samples)
+            if epoch == 0:
+                min_error = error
             p.writelines('error: ')
             print('error: ')
             print(error)
