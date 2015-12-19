@@ -62,9 +62,9 @@ class RandomWalking:
         return result
 
     def find_error(self, my_fen):
-        d1 = self.run_engine(max_depth=2, fen=my_fen, selected_engine_index=1)
-        d_max = self.run_engine(max_depth=10, fen=my_fen, selected_engine_index=0)
-        # if you use depth 1 for both engines the values converge to current values.
+        d1 = self.run_engine(max_depth=4, fen=my_fen, selected_engine_index=1)
+        d_max = self.run_engine(max_depth=8, fen=my_fen, selected_engine_index=0)
+        # if you use depth 1 for both engines the values should converge to current values.
         return abs(d_max - d1)
 
     def mse(self, max_samples):
@@ -72,8 +72,9 @@ class RandomWalking:
         s = 0.0
         count = 0
         line = p.readline()
+        max_samples *= 1.0
         while line != '' and count < max_samples:
-            s += self.find_error(line) / (max_samples * 1.0)
+            s += self.find_error(line) / max_samples
             count += 1
             line = p.readline()
         p.close()
@@ -93,41 +94,45 @@ class RandomWalking:
 
         values = []
         for i in range(variables_count):
-            best_values[i] *= 1.0   # casting!
+            best_values[i] *= 1.0  # casting!
             values.append(0.0)
 
         p = open('result.txt', 'a+')
         p.writelines('\n------------New session started-----------------\n')
-        min_error = 1000.0
+        for i in range(variables_count):
+            self.modified_engine.setoption({('vAlUe' + i.__repr__()): best_values[i]})
+        self.modified_engine.ucinewgame(async_callback=False)
+        min_error = error = self.mse(max_samples)
+        p.writelines('error: ' + error.__repr__() + '\n---------------------------------------\n')
+        print('error: ' + error.__repr__())
+
         for epoch in range(10000):
-            p.write('Epoch:' + epoch.__repr__() + '\n')
             print('Epoch:' + epoch.__repr__())
-            p.write('Values:\n')
             # update values
             for i in range(variables_count):
-                # This program suppose tuning values have names like vAlUe0, vAlUe2, etc.
+                # Tuning variables supposed to be vAlUe0, vAlUe2, etc.
                 value_name = 'vAlUe' + i.__repr__()
-                if epoch != 0:
-                    values[i] = best_values[i] + 2.0 * (random.random() - 0.5) * 10.0
-                else:
-                    values[i] = best_values[i]
-                new_value = values[i]
-                new_value = round(new_value) if new_value > 0 else 0  # interval!
-                new_value = round(new_value) if new_value < 1000 else 1000
+                values[i] = best_values[i] + 2.0 * (random.random() - 0.5) * 30.0
+                if values[i] < -1000.0:
+                    values[i] = -1000.0
+                if values[i] > 1000.0:
+                    values[i] = 1000.0
+                new_value = round(values[i])
                 self.modified_engine.setoption({value_name: new_value})
-                self.modified_engine.ucinewgame(async_callback=False)
-                p.writelines('best_values[' + i.__repr__() + '] = ' + new_value.__repr__() + '\n')
+            self.modified_engine.ucinewgame(async_callback=False)
             error = self.mse(max_samples)
-            p.writelines('error: ')
             print('error: ' + error.__repr__())
             if error < min_error:
                 for i in range(variables_count):
                     best_values[i] = values[i]
+                    new_value = round(values[i])
+                    p.writelines('best_values[' + i.__repr__() + '] = ' + new_value.__repr__() + '\n')
                 min_error = error
+                p.write('Epoch:' + epoch.__repr__() + '\nValues:\n')
                 p.writelines('Found better values!\n')
                 print('Found better values! ')
-            p.writelines(error.__repr__() + '\n---------------------------------------\n')
-            print('--------------------------------------------------')
+				p.writelines('error: ' + error.__repr__() + '\n---------------------------------------\n')
+            print('----------------------------------------')
             if error == 0:
                 break
         p.close()
@@ -135,6 +140,7 @@ class RandomWalking:
 
 def main():
     rw = RandomWalking()
-    rw.tune(1000, 6)
+    rw.tune(2000, 6)
+
 
 main()
