@@ -28,5 +28,5 @@ and so on OR just delete values.
 6- Important: Choose number of samples in main function. Choose big enough sample size so that mean error should not change much.
 7- The program will write logs in 'result.txt' file. You could use them later.
 8- File names should be base for current master compile and stockfish for modified version (or modify python code).
-9- Choose depths for modified engine and base engine in find_error() function. In the future it should be able to get values from a dataset file instead of base engine's evaluations. For example numbers provided by grandmasters for (FEN) positions or from the PGN of LTC tournament. It's goal is to change tuning values to minimize difference between current evaluations and ideal evaluations.
+9- Choose depths for modified engine and base engine in find_error() function. In the future it should be able to get values from a dataset file instead of base engine's evaluations. For example numbers provided by grandmasters for (FEN) positions or from the PGN of LTC tournament. It's goal is to change tuning values to minimize the difference between current evaluations and ideal evaluations.
 10- Run the program.
