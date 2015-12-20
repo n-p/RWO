@@ -17,15 +17,15 @@ if not (name == 'Clear' and value == 'Hash'):
 5- Follow the 'Tuning with SPSA' section in https://github.com/glinscott/fishtest/wiki/Creating-my-first-test to change stockfish code.
 You should change or modify uci.cpp, types.h, main.cpp, and add tune.h before compiling.
 Naming convention:
-use vAlUe0, vAlUe2, etc for variable names (or change the python file).
-6- Use some current best values or random values for best_values variable.
-For next runs you could update values with current minimum. For example:
+use vAlUe0, vAlUe2, etc for variable names (or change variable names pattern in python file).
+6- Use current best values or random values for best_values variable.
+For next runs you could update values with current local minimum. For example:
 best_values[0] = 50.0
 best_values[1] = 10.0
 best_values[2] = 24.0
 and so on OR just delete values.
 
-6- Choose number of samples in main function
-7- The program will write logs in 'result.txt' file.
-8- File names should be base for current master compile and stockfish for modified version.
-9- It's ready now to run the program.
+6- Important: Choose number of samples in main function. Choose big enough sample size so that mean error should not change much.
+7- The program will write logs in 'result.txt' file. You could use them later.
+8- File names should be base for current master compile and stockfish for modified version (or modify python code).
+9- Run the program.
