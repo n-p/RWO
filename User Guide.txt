@@ -1,4 +1,4 @@
-Non-Programmers Guide:
+User Guide:
 1- You need python installed on your machine (for Windows and OS X).
 2- Use this command to install python-chess module:
 pip install python-chess
