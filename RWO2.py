@@ -1,4 +1,3 @@
-# This program hasn't been tested.
 import random
 from chess import uci
 from chess import Board
