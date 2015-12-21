@@ -16,17 +16,8 @@ if not (name == 'Clear' and value == 'Hash'):
 4- A file with many FEN positions. You can modify book.epd from Joona Kiiski's SPSA repository (needs modifications).
 5- Follow the 'Tuning with SPSA' section in https://github.com/glinscott/fishtest/wiki/Creating-my-first-test to change stockfish code.
 You should change or modify uci.cpp, types.h, main.cpp, and add tune.h before compiling.
-Naming convention:
-use vAlUe0, vAlUe2, etc for variable names (or change variable names pattern in python file).
-6- Use current best values or random values for best_values variable.
-For next runs you could update values with current local minimum. For example:
-best_values[0] = 50.0
-best_values[1] = 10.0
-best_values[2] = 24.0
-and so on OR just delete values.
-
 6- Important: Choose number of samples in main function. Choose big enough sample size so that mean error should not change much.
 7- The program will write logs in 'result.txt' file. You could use them later.
-8- File names should be base for current master compile and stockfish for modified version (or modify python code).
-9- Choose depths for modified engine and base engine in find_error() function. In the future it should be able to get values from a dataset file instead of base engine's evaluations. For example numbers provided by grandmasters for (FEN) positions or from the PGN of LTC tournament. It's goal is to change tuning values to minimize the difference between current evaluations and ideal evaluations.
+8- File names should be base for current master compile and stockfish for modified version (or change it in python code).
+9- Choose depth for modified engine and base engine in find_error() function. In the future it should be able to get values from a dataset file instead of base engine's evaluations. For example numbers provided by grandmasters for (FEN) positions or from the PGN of LTC tournament. It's goal is to change tuning values to minimize the difference between current evaluations and ideal evaluations.
 10- Run the program.
