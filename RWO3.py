@@ -128,7 +128,6 @@ class RandomWalking:
         for epoch in range(10000):
             print('Epoch:' + epoch.__repr__())
             for i in range(self.variables_count):
-                # This program suppose tuning values have names like vAlUe0, vAlUe2, etc.
                 values[i] = self.best_values[i] + 2.0 * (random.random() - 0.5) * 30.0
                 if values[i] < self.range[i][0]:  # min
                     values[i] = self.range[i][0]
