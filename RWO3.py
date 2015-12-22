@@ -128,7 +128,10 @@ class RandomWalking:
         for epoch in range(10000):
             print('Epoch:' + epoch.__repr__())
             for i in range(self.variables_count):
-                values[i] = random.randint(self.range[i][0], self.range[i][1])
+                # Smaller steps
+                min_ = self.best_values[i] - 20 if self.best_values[i] - 20 >= self.range[i][0] else self.range[i][0]
+                max_ = self.best_values[i] + 20 if self.best_values[i] + 20 <= self.range[i][1] else self.range[i][1]
+                values[i] = random.randint(min_, max_)
                 self.modified_engine.setoption({self.variable_names[i]: values[i]})
             self.modified_engine.ucinewgame(async_callback=False)
             error = self.mse(max_samples)
