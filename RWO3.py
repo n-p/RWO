@@ -58,7 +58,7 @@ class RandomWalking:
         for i in range(self.variables_count):
             self.variable_names.append(result[i][0])
             self.best_values.append(float(result[i][1]))
-            self.range.append([float(result[i][2]), float(result[i][3])])
+            self.range.append([int(result[i][2]), int(result[i][3])])
 
     def open_engine_process(self):
         self.modified_engine = uci.popen_engine(self.modified_file_name)
@@ -93,7 +93,7 @@ class RandomWalking:
         return result
 
     def find_error(self, my_fen):
-        d1 = self.run_engine(max_depth=4, fen=my_fen, selected_engine_index=1)
+        d1 = self.run_engine(max_depth=2, fen=my_fen, selected_engine_index=1)
         d_max = self.run_engine(max_depth=8, fen=my_fen, selected_engine_index=0)
         # if you use depth 1 for both engines the values should converge to current values.
         return abs(d_max - d1)
@@ -128,13 +128,8 @@ class RandomWalking:
         for epoch in range(10000):
             print('Epoch:' + epoch.__repr__())
             for i in range(self.variables_count):
-                values[i] = self.best_values[i] + 2.0 * (random.random() - 0.5) * 30.0
-                if values[i] < self.range[i][0]:  # min
-                    values[i] = self.range[i][0]
-                if values[i] > self.range[i][1]:  # max
-                    values[i] = self.range[i][1]
-                new_value = round(values[i])
-                self.modified_engine.setoption({self.variable_names[i]: new_value})
+                values[i] = random.randint(self.range[i][0], self.range[i][1])
+                self.modified_engine.setoption({self.variable_names[i]: values[i]})
             self.modified_engine.ucinewgame(async_callback=False)
             error = self.mse(max_samples)
             print('Error: ' + error.__repr__())
