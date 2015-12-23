@@ -98,7 +98,7 @@ class RandomWalking:
         # if you use depth 1 for both engines the values should converge to current values.
         return abs(d_max - d1)
 
-    def mse(self, max_samples):
+    def mae(self, max_samples):
         p = open(self.FEN_file)
         s = 0.0
         count = 0
@@ -121,7 +121,7 @@ class RandomWalking:
         for i in range(self.variables_count):
             self.modified_engine.setoption({self.variable_names[i]: self.best_values[i]})
         self.modified_engine.ucinewgame(async_callback=False)
-        min_error = error = self.mse(max_samples)
+        min_error = error = self.mae(max_samples)
         p.writelines('Error: ' + error.__repr__() + '\n---------------------------------------\n')
         print('Error: ' + error.__repr__())
 
@@ -134,7 +134,7 @@ class RandomWalking:
                 values[i] = random.randint(min_, max_)
                 self.modified_engine.setoption({self.variable_names[i]: values[i]})
             self.modified_engine.ucinewgame(async_callback=False)
-            error = self.mse(max_samples)
+            error = self.mae(max_samples)
             print('Error: ' + error.__repr__())
             if error < min_error:
                 for i in range(self.variables_count):
