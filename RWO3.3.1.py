@@ -119,9 +119,15 @@ class RandomWalking:
             print('Error: ' + error.__repr__())
             if error < min_error:
                 for i in range(self.variables_count):
+                    diff = values[i] - self.best_values[i]
                     self.best_values[i] = values[i]
                     new_value = round(values[i])
-                    log_file.writelines(self.variable_names[i] + ' = ' + new_value.__repr__() + '\n')
+                    log_file.writelines(self.variable_names[i] + ' = ' + new_value.__repr__())
+                    if diff > 0:
+                        log_file.writelines(' <- increased')
+                    elif diff < 0:
+                        log_file.writelines(' <- decreased')
+                    log_file.writelines('\n')
                 min_error = error
                 log_file.write('Iteration:' + iteration.__repr__() + '\nValues:\n')
                 log_file.writelines('Found better values!\n')
