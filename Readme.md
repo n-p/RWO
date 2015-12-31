@@ -1,6 +1,6 @@
 ### What's new
 * Automatic detection of tuning variables.
-* Now it shows which values changed during last iteration.
+* It shows which values changed during the last iteration.
 * It's testing just small random samples before testing them thoroughly.
 
 ### How it works?
