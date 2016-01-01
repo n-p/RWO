@@ -1,3 +1,18 @@
+# Copyright (C) N. Paeideh
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 import random
 from chess import uci
 from chess import Board
@@ -16,10 +31,10 @@ class RandomWalking:
     variable_names = []
     best_values = []
     range = []  # [[min0,max0], [min1, max1], ...]
-    positions_evals = []
-    samples_count = 0
+    train_positions_evals = []
+    test_positions_evals = []
 
-    def __init__(self, epd_file_path, max_samples):
+    def __init__(self, epd_file_path, max_samples, test_fraction):
         if IS_WINDOWS:
             self.modified_file_name = 'stockfish.exe'
         else:
@@ -28,7 +43,7 @@ class RandomWalking:
         self.open_engine_process()
         self.modified_engine.setoption({'Threads': '1'})
         self.modified_engine.setoption({'Hash': '128'})
-        self.get_all_positions(epd_file_path, max_samples)
+        self.get_all_positions(epd_file_path, max_samples, test_fraction)
 
     def detect_variable_names(self):
         try:
@@ -40,7 +55,7 @@ class RandomWalking:
                 if 'id name' in line:
                     break
                 result.append(line.split(','))
-            # TODO: Add exception handling logic here
+                # TODO: Add exception handling logic here
         finally:
             # TODO: it's assigned?
             p.kill()
@@ -73,36 +88,46 @@ class RandomWalking:
         result = self.info_handler_modified.info["score"][1].cp
         return result
 
-    def get_all_positions(self, epd_file_path, max_samples):
+    def get_all_positions(self, epd_file_path, max_samples, test_fraction):
         # EPD file format is: odd lines is EPD position even lines is ideal outputs
         epd_file = open(epd_file_path)
         count = 0
-        epd_line = epd_file.readline()     # EPD position
+        epd_line = epd_file.readline()  # EPD position
         while len(epd_line) > 8 and count < max_samples:
-            cp = int(epd_file.readline())     # ideal values in centipawn
-            self.positions_evals.append([epd_line, cp])
-            epd_line = epd_file.readline()     # EPD position
+            cp = int(epd_file.readline())  # ideal values in centipawn
+            self.train_positions_evals.append([epd_line, cp])
+            epd_line = epd_file.readline()  # EPD position
             count += 1
         epd_file.close()
-        self.samples_count = float(len(self.positions_evals))
+
+        # We have all sample in self.train_positions_evals now
+        samples_count = len(self.train_positions_evals)
+        for _ in range(1, int(test_fraction * samples_count)):
+            r = random.randint(0, samples_count - 1)
+            temp = self.train_positions_evals[r]
+            self.test_positions_evals.append(temp)
+            self.train_positions_evals.remove(temp)
+            samples_count -= 1
 
     def fast_mae(self, fraction):
         # We are using a fraction of samples
         s = 0.0
-        samples_count2 = fraction * self.samples_count
+        samples_count = float(len(self.train_positions_evals))
+        samples_count2 = fraction * samples_count
         for i in range(int(samples_count2)):
-            r = random.randint(0, self.samples_count - 1)
-            pos, cp = self.positions_evals[r]
+            r = random.randint(0, samples_count - 1)
+            pos, cp = self.train_positions_evals[r]
             error = abs(self.run_engine(epd=pos, move_time=50) - cp)
             s += error / samples_count2
         return s
 
-    def mae(self):
+    def mae(self, position_evals):      # It has to know we want to calculate mae for train or test
         # mae for all samples
         s = 0.0
-        for pos, cp in self.positions_evals:
+        samples_count = float(len(position_evals))
+        for pos, cp in position_evals:
             error = abs(self.run_engine(epd=pos, move_time=50) - cp)
-            s += error / self.samples_count
+            s += error / samples_count
         return s
 
     def tune(self, number_of_variables_have_chance):
@@ -116,8 +141,10 @@ class RandomWalking:
             self.modified_engine.setoption({self.variable_names[i]: self.best_values[i]})
             values[i] = self.best_values[i]
         self.modified_engine.ucinewgame(async_callback=False)
-        min_error = error = self.mae()
-        log_file.writelines('Error before first iteration: ' + error.__repr__() + '\n---------------------------------------\n')
+        train_min_error = error = self.mae(self.train_positions_evals)
+        test_min_error = self.mae(self.test_positions_evals)
+        log_file.writelines('Error before first iteration: ' + error.__repr__() +
+                            "\n---------------------------------------\n")
         print('Error before first iteration: ' + error.__repr__())
         log_file.close()
 
@@ -137,38 +164,44 @@ class RandomWalking:
             error = self.fast_mae(0.1)
             print('Error: ' + error.__repr__())
             # Kind of MLFQ
-            if error < min_error:
+            if error < train_min_error:
                 # Make sure before reporting
                 print("Let's test it again with more samples to make sure ...")
                 error = self.fast_mae(0.1)
                 print('Error: ' + error.__repr__())
-                if error < min_error:
-                    print("Let's test it again with even more samples to make sure ...")
+                if error < train_min_error:
+                    print("Let's test it again with even more samples ...")
                     error = self.fast_mae(0.3)
                     print('Error: ' + error.__repr__())
-                    if error < min_error:
-                        print("Let's test it again with all samples ...")
-                        error = self.mae()
+                    if error < train_min_error:
+                        print("Ok! Let's test it with all training samples ...")
+                        error = self.mae(self.train_positions_evals)
                         print('Error: ' + error.__repr__())
-                        if error < min_error:
-                            log_file = open('result.txt', 'a+')
-                            # Now we are sure
-                            for i in range(self.variables_count):
-                                diff = values[i] - self.best_values[i]
-                                self.best_values[i] = values[i]
-                                new_value = round(values[i])
-                                log_file.writelines(self.variable_names[i] + ' = ' + new_value.__repr__())
-                                if diff > 0:
-                                    log_file.writelines(' <- increased')
-                                elif diff < 0:
-                                    log_file.writelines(' <- decreased')
-                                log_file.writelines('\n')
-                            min_error = error
-                            log_file.write('Iteration:' + iteration.__repr__() + '\nValues:\n')
-                            log_file.writelines('Found better values!\n')
-                            print('Found better values! ')
-                            log_file.writelines('Error: ' + error.__repr__() + '\n---------------------------------------\n')
-                            log_file.close()
+                        if error < train_min_error:
+                            test_error = self.mae(self.test_positions_evals)
+                            if test_error < test_min_error:
+                                test_min_error = test_error
+                                log_file = open('result.txt', 'a+')
+                                # Now we are sure
+                                for i in range(self.variables_count):
+                                    diff = values[i] - self.best_values[i]
+                                    self.best_values[i] = values[i]
+                                    new_value = round(values[i])
+                                    log_file.writelines(self.variable_names[i] + ' = ' + new_value.__repr__())
+                                    if diff > 0:
+                                        log_file.writelines(' <- increased')
+                                    elif diff < 0:
+                                        log_file.writelines(' <- decreased')
+                                    log_file.writelines('\n')
+                                train_min_error = error
+                                log_file.write('Iteration:' + iteration.__repr__() + '\nValues:\n')
+                                log_file.writelines('Better values!\n')
+                                print('We found better values!')
+                                log_file.writelines(
+                                    'Error: ' + error.__repr__() + '\n---------------------------------------\n')
+                                log_file.close()
+                            else:
+                                print("Failed in test set!")
             print('----------------------------------------')
             if error == 0:
                 print('Congrats!')
@@ -176,7 +209,7 @@ class RandomWalking:
 
 
 def main():
-    rw = RandomWalking("sts-arasan-7200ms-stockfish-beta2.epd", 1000000)
+    rw = RandomWalking("sts-arasan-7200ms-stockfish-beta2.epd", 1000000, 0.1)
     rw.tune(5)
 
 
