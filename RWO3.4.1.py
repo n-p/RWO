@@ -8,8 +8,8 @@ IS_WINDOWS = 'windows' in platform.system().lower()
 
 
 class RandomWalking:
+    # For clarity
     modified_file_name = ''
-    # for clarity
     modified_engine = None
     info_handler_modified = None
     variables_count = 0
@@ -27,8 +27,8 @@ class RandomWalking:
         self.detect_variable_names()
         self.open_engine_process()
         self.modified_engine.setoption({'Threads': '1'})
-        self.samples_count = float(max_samples)
-        self.get_all_positions(epd_file_path)
+        self.modified_engine.setoption({'Hash': '128'})
+        self.get_all_positions(epd_file_path, max_samples)
 
     def detect_variable_names(self):
         try:
@@ -73,16 +73,18 @@ class RandomWalking:
         result = self.info_handler_modified.info["score"][1].cp
         return result
 
-    def get_all_positions(self, epd_file_path):
+    def get_all_positions(self, epd_file_path, max_samples):
         # EPD file format is: odd lines is EPD position even lines is ideal outputs
         epd_file = open(epd_file_path)
         count = 0
         epd_line = epd_file.readline()     # EPD position
-        while epd_line != '' and count < self.samples_count:
+        while len(epd_line) > 8 and count < max_samples:
             cp = int(epd_file.readline())     # ideal values in centipawn
             self.positions_evals.append([epd_line, cp])
             epd_line = epd_file.readline()     # EPD position
+            count += 1
         epd_file.close()
+        self.samples_count = float(len(self.positions_evals))
 
     def fast_mae(self, fraction):
         # We are using a fraction of samples
@@ -123,8 +125,8 @@ class RandomWalking:
             print('Iteration:' + iteration.__repr__())
             for i in range(self.variables_count):
                 # Smaller steps
-                min_ = self.best_values[i] - 20 if self.best_values[i] - 20 >= self.range[i][0] else self.range[i][0]
-                max_ = self.best_values[i] + 20 if self.best_values[i] + 20 <= self.range[i][1] else self.range[i][1]
+                min_ = self.best_values[i] - 50 if self.best_values[i] - 50 >= self.range[i][0] else self.range[i][0]
+                max_ = self.best_values[i] + 50 if self.best_values[i] + 50 <= self.range[i][1] else self.range[i][1]
                 # Only limited number of variables have a chance. 3 in here
                 if random.randint(1, self.variables_count) > number_of_variables_have_chance:
                     values[i] = self.best_values[i]
@@ -174,8 +176,8 @@ class RandomWalking:
 
 
 def main():
-    rw = RandomWalking("all-positions.epd", 1225 + 6500)
-    rw.tune(2)
+    rw = RandomWalking("sts-arasan-7200ms-stockfish-beta2.epd", 1000000)
+    rw.tune(5)
 
 
 main()
