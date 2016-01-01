@@ -2,8 +2,9 @@
 # Change your engine's name to "base.exe" (on windows) and "base" on other platforms
 # Give these arguments to evaluate_all_positions method
 # 1- Change epd file's path to your file's (epd file should contain only EPDs)
-# 2- Sample size
-# 3- move time for each position in milliseconds
+# 2- Output file
+# 3- Maximum sample size
+# 4- move time for each position in milliseconds
 # The output file is "analyzed.txt" that contains epd positions and evaluations in separate lines.
 
 from chess import uci
