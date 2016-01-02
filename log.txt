@@ -1,0 +1,315 @@
+All variables initialized to 100.
+This is the result of extrapolation (depth 1 to 7200ms).
+
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55 <- decreased
+mOutpost_0_1 = 100
+eOutpost_0_1 = 100
+mOutpost_1_0 = 100
+eOutpost_1_0 = 100
+mOutpost_1_1 = 100
+eOutpost_1_1 = 100
+Iteration:10
+Values:
+Better values!
+Train error: 70.10723350253797
+---------------------------------------
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55
+mOutpost_0_1 = 100
+eOutpost_0_1 = 100
+mOutpost_1_0 = 100
+eOutpost_1_0 = 68 <- decreased
+mOutpost_1_1 = 100
+eOutpost_1_1 = 100
+Iteration:16
+Values:
+Better values!
+Train error: 69.89403553299485
+---------------------------------------
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55
+mOutpost_0_1 = 100
+eOutpost_0_1 = 100
+mOutpost_1_0 = 61 <- decreased
+eOutpost_1_0 = 68
+mOutpost_1_1 = 100
+eOutpost_1_1 = 100
+Iteration:19
+Values:
+Better values!
+Train error: 69.7620558375634
+---------------------------------------
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55
+mOutpost_0_1 = 100
+eOutpost_0_1 = 100
+mOutpost_1_0 = 61
+eOutpost_1_0 = 68
+mOutpost_1_1 = 100
+eOutpost_1_1 = 93 <- decreased
+Iteration:41
+Values:
+Better values!
+Train error: 69.73032994923851
+---------------------------------------
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74 <- decreased
+eOutpost_0_1 = 100
+mOutpost_1_0 = 61
+eOutpost_1_0 = 68
+mOutpost_1_1 = 100
+eOutpost_1_1 = 93
+Iteration:42
+Values:
+Better values!
+Train error: 69.45558375634513
+---------------------------------------
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74 <- decreased
+mOutpost_1_0 = 61
+eOutpost_1_0 = 68
+mOutpost_1_1 = 100
+eOutpost_1_1 = 93
+Iteration:86
+Values:
+Better values!
+Train error: 69.3654822335025
+---------------------------------------
+mOutpost_0_0 = 100
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42 <- decreased
+eOutpost_1_0 = 68
+mOutpost_1_1 = 100
+eOutpost_1_1 = 93
+Iteration:104
+Values:
+Better values!
+Train error: 69.33248730964462
+---------------------------------------
+mOutpost_0_0 = 96 <- decreased
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 68
+mOutpost_1_1 = 100
+eOutpost_1_1 = 93
+Iteration:121
+Values:
+Better values!
+Train error: 69.29758883248725
+---------------------------------------
+mOutpost_0_0 = 96
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38 <- decreased
+mOutpost_1_1 = 100
+eOutpost_1_1 = 93
+Iteration:135
+Values:
+Better values!
+Train error: 69.15926395939081
+---------------------------------------
+mOutpost_0_0 = 96
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = 61 <- decreased
+Iteration:143
+Values:
+Better values!
+Train error: 69.06852791878165
+---------------------------------------
+mOutpost_0_0 = 96
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = 46 <- decreased
+Iteration:150
+Values:
+Better values!
+Train error: 69.04441624365475
+---------------------------------------
+mOutpost_0_0 = 96
+eOutpost_0_0 = 55
+mOutpost_0_1 = 74
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = 6 <- decreased
+Iteration:153
+Values:
+Better values!
+Train error: 69.02030456852789
+---------------------------------------
+mOutpost_0_0 = 96
+eOutpost_0_0 = 55
+mOutpost_0_1 = 64 <- decreased
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = 6
+Iteration:214
+Values:
+Better values!
+Train error: 68.95114213197964
+---------------------------------------
+mOutpost_0_0 = 96
+eOutpost_0_0 = 55
+mOutpost_0_1 = 64
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27 <- decreased
+Iteration:258
+Values:
+Better values!
+Train error: 68.95114213197962
+---------------------------------------
+mOutpost_0_0 = 62 <- decreased
+eOutpost_0_0 = 55
+mOutpost_0_1 = 64
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:269
+Values:
+Better values!
+Train error: 68.71256345177657
+---------------------------------------
+mOutpost_0_0 = 45 <- decreased
+eOutpost_0_0 = 55
+mOutpost_0_1 = 64
+eOutpost_0_1 = 74
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:279
+Values:
+Better values!
+Train error: 68.59454314720804
+---------------------------------------
+mOutpost_0_0 = 45
+eOutpost_0_0 = 55
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62 <- decreased
+mOutpost_1_0 = 42
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:374
+Values:
+Better values!
+Train error: 68.59137055837556
+---------------------------------------
+mOutpost_0_0 = 45
+eOutpost_0_0 = 55
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22 <- decreased
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:391
+Values:
+Better values!
+Train error: 68.5907360406091
+---------------------------------------
+mOutpost_0_0 = 45
+eOutpost_0_0 = 8 <- decreased
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:400
+Values:
+Better values!
+Train error: 68.35215736040605
+---------------------------------------
+mOutpost_0_0 = 22 <- decreased
+eOutpost_0_0 = 8
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22
+eOutpost_1_0 = 38
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:421
+Values:
+Better values!
+Train error: 68.26840101522836
+---------------------------------------
+mOutpost_0_0 = 22
+eOutpost_0_0 = 8
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22
+eOutpost_1_0 = 21 <- decreased
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:468
+Values:
+Better values!
+Train error: 68.23032994923854
+---------------------------------------
+mOutpost_0_0 = 22
+eOutpost_0_0 = 8
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22
+eOutpost_1_0 = 2 <- decreased
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:471
+Values:
+Better values!
+Train error: 68.18654822335017
+---------------------------------------
+mOutpost_0_0 = 11 <- decreased
+eOutpost_0_0 = 8
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22
+eOutpost_1_0 = 2
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:481
+Values:
+Better values!
+Train error: 68.17258883248722
+---------------------------------------
+mOutpost_0_0 = 11
+eOutpost_0_0 = -11 <- decreased
+mOutpost_0_1 = 64
+eOutpost_0_1 = 62
+mOutpost_1_0 = 22
+eOutpost_1_0 = 2
+mOutpost_1_1 = 100
+eOutpost_1_1 = -27
+Iteration:508
+Values:
+Better values!
+Train error: 68.14213197969539
+---------------------------------------
