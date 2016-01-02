@@ -1,5 +1,5 @@
 All variables initialized to 100.
-This is the result of extrapolation (depth 1 to 7200ms).
+This is the result of extrapolation (depth 1 to 7200ms) after 775 iterations.
 ---------------------------------------
 Train error before first iteration: 70.3997461928933
 Test error before first iteration: 65.86206896551721
