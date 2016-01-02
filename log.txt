@@ -1,7 +1,20 @@
-I removed first part accidently.
 All variables initialized to 100.
 This is the result of extrapolation (depth 1 to 7200ms).
-
+---------------------------------------
+Train error before first iteration: 70.3997461928933
+Test error before first iteration: 65.86206896551721
+----------------------------------------
+Iteration:10
+Error: 68.98477157360404
+Let's test it again with more samples to make sure ...
+Error: 68.52157360406095
+Let's test it again with even more samples ...
+Error: 68.13874788494087
+Ok! Let's test it with all training samples ...
+Error: 70.10723350253797
+Test error: 65.73563218390802
+We found better values!
+---------------------------------------
 mOutpost_0_0 = 100
 eOutpost_0_0 = 55 <- decreased
 mOutpost_0_1 = 100
